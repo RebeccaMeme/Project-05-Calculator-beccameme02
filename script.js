@@ -55,50 +55,54 @@ if (regex.test(str)) {
     console.log("La chaîne ne respecte pas les conditions requises.");
   }
 }
-//let calculationText = document.getElementById("calculation-text");
-//let inputNumber = document.getElementById("input-number");
-//let calculateButton = document.getElementById("calculate-button");
-//calculateButton.onclick = function() {
-  //let numberEntered = Number(inputNumber.value);
-  //let calculationString = "23 x " + numberEntered;
-   //calculationText.textContent = calculationString;
+function evaluateExpression() {
+  let input = document.getElementById("input").value;
 
+  // Vérifier si l'entrée commence par un zéro suivi d'autres chiffres
+  if (/^0[0-9]/.test(input)) {
+    console.log("Valeur d'entrée invalide !");
+    return;
+  }
+  let result = eval(input);
+  document.getElementById("output").innerHTML = "Résultat : " + result;
+}
+document.getElementById("calculate-button");
+document.addEventListener("click", evaluateExpression);
+let plusButton = document.getElementById("plus-button");
+let minusButton = document.getElementById("minus-button");
+plusButton.addEventListener("click", function() {
+  currentNumber = -currentNumber;
+  updateDisplay(currentNumber);
+});
+minusButton.addEventListener("click", function() {
+  currentNumber = -currentNumber;
+  updateDisplay(currentNumber);
+});
+percentageButton.onclick = function() {
+  let resultElement = document.getElementById("result");
+  let resultValue = parseFloat(resultElement.value);
+  // Calculer le pourcentage en divisant par 100
+  let percentageResult = resultValue / 100;
+  resultElement.value = percentageResult;
+};
+let currentInput = "";
+let previousResult = 0;
+function AC() {
+  currentInput = "";
+  previousResult = 0;
+}
+function C() {
+  currentInput = "";
+}
+document.getElementById("reset-button").addEventListener("click", AC);
+document.getElementById("clear-button").addEventListener("click", C);
+function calculate() {
+  let inputEquals = document.getElementById("equals");
+  // Lire la valeur actuelle du champ de saisie
+  let inputValue = inputEquals.value;
+  let result = eval(inputValue);
+  // Ajouter le signe égal (=) à la chaîne d'entrée et afficher le résultat dans le champ de saisie
+  inputEquals.value = inputValue + " = " + result;
+}
 
-
-window.addEventListener('DOMContentLoaded', updateCalculText);
-let numericButtons = document.querySelectorAll(".numeric-Button");
-let inputValue = "";
-numericButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        let number = button.textContent;
-        inputValue += number;
-        inputField.value = inputValue;
-    })
-})
-//buttons.forEach(button => {
-    //button.addEventListener('click', () => {
-      //const buttonText = button.textContent;
-      //switch (button.id) {
-        //case 'reset':
-            //console.log('AC Button was clicked');
-            //break;
         
-      //case 'clear':
-        //console.log('C Button was clicked');
-        //break;
-        //case 'percentage':
-            //console.log('% Button was clicked');
-        // break;
-         //case 'divideby':
-            //console.log('/ Button was Clicked');
-            //default:
-       //if (button.classList.contains('digit')) {
-        //console.log(`Digit ${buttonText} Button was clicked`);
-    //} else if (button.classList.contains('dot')) {
-        //console.log(`Dot . Button was clicked`);
-    //}
-    
-    //break;
-//}
-//});
-//});
