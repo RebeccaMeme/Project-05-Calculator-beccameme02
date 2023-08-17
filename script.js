@@ -1,62 +1,93 @@
-//import {calculate} from "./calculator";
+import { calculate } from './calculator.js';
 
-// TODO: Faire la manipulation du DOM dans ce fichier
-//ttt
-let inputElement = document.getElementById("input");
-let calculElement = document.getElementById("calcul");
-let numericButtons = document.querySelectorAll(".numpad");
-numericButtons.forEach((button)=> {
-  // console.log(button.textContent);
-  button.addEventListener("click",(e)=> {
-  //  console.log(e.target.textContent);
-  inputElement.value += e.target.textContent
+// // TODO: Faire la manipulation du DOM dans ce fichier
+const calculElement = document.querySelector('#calcul');
+const inputElement = document.querySelector('#input');
+const buttonsElements = document.querySelectorAll('.numpad');
+const operators = document.querySelectorAll('#divideby, #times, #minus, #plus');
+const equals = document.querySelector('#equals');
+const reset = document.querySelector('#reset');
+const clear = document.querySelector('#clear');
+
+
+let displayOne = '';
+let displayTwo = '';
+inputElement.value = '';
+let result = null;
+let lastOperator = '';
+
+
+buttonsElements.forEach(number => {
+  number.addEventListener('click', (e) => {
+    displayTwo += e.target.innerText;
+    inputElement.value = displayTwo;
+
   })
 })
-let equalsButton = document.getElementById("equals");
-let percentageButton = document.getElementById("percentage");
 
-// numericButtons.forEach(function(button){
-//   button.addEventListener("click", function(){
+operators.forEach(operation => {
+  operation.addEventListener('click', (e) => {
+    if (!displayTwo) return;
 
-//     let digit = this.textContent;
-//     if (!(digit === "0" && input === "")){
-//       input += digit;
-//     }
-//   });
-// });
-// let currentCalculation = "";
-// function updateInput(value){
-//   inputElement.value += value;
-//   function updateCalculation(value){
-//     currentCalculation += value;
-//     calculElement.textContent = currentCalculation;
-//   }
-//   function calculate(){
-//     result;
-//     try{
-//       result = eval(currentCalculation);
-//       inputElement.value = result;
-//       currentCalculation = "";
-//       calculElement.textContent = "";
-//     } catch (error) {
-//       // Gestion des erreurs lors du calcul
-//       console.error(error);
-//     }
-//  }
-// }
-// let input = "";
+    const operationName = e.target.innerText;
+    if (displayOne && displayTwo && lastOperator) {
+      operations();
+    } else {
+      result = parseFloat(displayTwo);
+    }
+    clearElement(operationName);
+    lastOperator = operationName;
+  })
+});
 
-// let plusMinusButton = document.getElementById("plus-Minus-Button");
-// plusMinusButton.addEventListener("click", function(){
-//   if (input !== ""){
-//     if(input[0] === "-"){
-//       input = input.slice(1);
-//     } else{
-//       input = "-" + input;
-//     }
-//   }
-// })
+function clearElement(name='') {
+  displayOne += displayTwo + ' ' + name + ' ';
+  calculElement.innerText = displayOne;
+  inputElement.value = '';
+  displayTwo = '';
+}
+function operations() {
+  if (lastOperator === '×') {
+    result = parseFloat(result) * parseFloat(displayTwo);
+  }
+  else if (lastOperator === '+') {
+    result = parseFloat(result) + parseFloat(displayTwo);
+  }
+  else if (lastOperator === '-') {
+    result = parseFloat(result) - parseFloat(displayTwo);
+  } else if (lastOperator === '÷') {
+    result = parseFloat(result) / parseFloat(displayTwo);
+  }
+}
 
+equals.addEventListener('click', (e) => {
+  if (!displayOne || !displayTwo) return;
 
+  operations();
+  clearElement();
+  if (result == "Infinity" || result == "NaN") {
+    inputElement.value = 'Error'
+  } else {
+    calculElement.innerHTML += '='
+    inputElement.value = result;
+  }
+  displayTwo = result
+  displayOne = ''
+})
 
-        
+reset.addEventListener('click', (e) => {
+  calculElement.innerText = '';
+  inputElement.value = '';
+  displayTwo = '';
+  displayOne = '';
+  result = '';
+});
+
+clear.addEventListener('click', (e) => {
+  if (inputElement.value == '') {
+    return
+  } else {
+    inputElement.value = inputElement.value.slice(0, 0);
+  }
+})
+
